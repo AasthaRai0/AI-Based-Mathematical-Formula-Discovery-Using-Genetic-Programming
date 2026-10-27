@@ -142,19 +142,3 @@ To use a CSV inside `main.py` instead, replace one of the `make_dataset_X()` cal
 from datasets import load_dataset_from_csv
 X, y, variables = load_dataset_from_csv("your_file.csv", target_column="your_target_column_name")
 ```
-
----
-
-## 5. Key project rules followed
-
-- ❌ No Gradient Descent used anywhere.
-- ❌ No pre-built symbolic-regression/GP library (`gplearn`, `DEAP`, `PySR`, etc.) used as the algorithm.
-- ✅ Genetic Programming implemented completely from scratch (tree, generator, fitness,
-  selection, crossover, mutation, elitism, bloat control — all hand-written).
-- ✅ Thousands of unique, non-hardcoded expressions generated and evolved per run.
-- ✅ Invalid expressions (divide-by-zero, log/sqrt of negative numbers, overflow, NaN,
-  Infinity) are handled safely and never crash the program.
-- ✅ SymPy is used only to **display** a simplified version of the final formula —
-  the search/discovery algorithm itself never calls it.
-
----
