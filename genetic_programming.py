@@ -30,13 +30,17 @@ import random
 def genetic_programming(X, y, variables, pop_size=400, generations=40,
                          max_depth=5, elitism=6, lam=0.01,
                          tournament_k=3, mutation_rate=0.25, crossover_rate=0.8,
-                         verbose=True):
+                         verbose=True, progress_callback=None):
     """
     Runs the full Genetic Programming pipeline for symbolic regression.
 
     Returns:
         unique_formulas      : dict {formula_string: (tree, fitness, mse, complexity)}
         best_fitness_per_gen : list of best fitness value at each generation
+
+    progress_callback (optional): called once per generation as
+        progress_callback(generation_number, total_generations, best_fitness, best_tree)
+    Used by the Streamlit UI to show live progress. It does not affect the search.
     """
     population = initialize_population(pop_size, variables, max_depth)
     best_fitness_per_gen = []
@@ -56,6 +60,9 @@ def genetic_programming(X, y, variables, pop_size=400, generations=40,
 
         order = sorted(range(len(population)), key=lambda i: fitnesses[i])
         best_fitness_per_gen.append(fitnesses[order[0]])
+
+        if progress_callback is not None:
+            progress_callback(gen + 1, generations, fitnesses[order[0]], population[order[0]])
 
         if verbose and (gen % 5 == 0 or gen == generations - 1):
             print(f"  Gen {gen:3d} | Best fitness = {fitnesses[order[0]]:.6f} | "
